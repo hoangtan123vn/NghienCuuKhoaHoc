@@ -1,4 +1,4 @@
-package com.onion.model;
+package com.onion;
 
 import lombok.Data;
 

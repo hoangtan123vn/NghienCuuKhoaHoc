@@ -1,7 +1,7 @@
-package com.onion.service;
+package com.onion;
 
 import com.onion.entity.User;
-import com.onion.model.UserModel;
+import com.onion.UserModel;
 import com.onion.repository.UserRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;

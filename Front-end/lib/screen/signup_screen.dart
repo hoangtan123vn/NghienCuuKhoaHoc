@@ -62,13 +62,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 child: TextField(
                   controller: _userController,
                   style: TextStyle(fontSize: 18, color: Colors.black),
-                  keyboardType: TextInputType.phone,
+                  keyboardType: TextInputType.emailAddress,
                   decoration: InputDecoration(
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(50),
                       ),
-                      prefixIcon: Icon(Icons.phone) ,
-                      labelText: "Phone number",
+                      prefixIcon: Icon(Icons.email) ,
+                      labelText: "Email",
                       errorText: _userInvalid ? _userError : null,
                       labelStyle: TextStyle(color: Color(AppColors.PRIMARY), fontSize: 15)),
                 ),

@@ -1,4 +1,4 @@
-package com.onion;
+package com.onion.controller;
 
 
 import com.onion.entity.Customer;
@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class LocalSeachAPI {
-
 
     @Autowired
     private CustomerRepository customerRepository;

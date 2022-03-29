@@ -42,8 +42,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         newUser.setUsername(user.getUsername());
         newUser.setPassword(passwordEncoder.encode(user.getPassword()));
         Role role = new Role();
-        role.setId_role(1);
-        role.setName_role("ADMIN");
+        role.setId_role(user.getRole().getId_role());
+        role.setName_role(user.getRole().getName_role());
+      //  role.setName_role("ADMIN");
         newUser.setRole(role);
         return userRepository.save(newUser);
     }

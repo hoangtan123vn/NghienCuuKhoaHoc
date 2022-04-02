@@ -1,1 +1,1 @@
-web: java -jar /bm-start/target/bm-start-0.0.1heroku logs --tail-SNAPSHOT.war
+web: java -jar /bm-start/target/bm-start-0.0.1-SNAPSHOT.war

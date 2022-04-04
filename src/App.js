@@ -5,7 +5,7 @@ import axios from 'axios'
 
 function App() {
   const [articleId, setArticleId] = useState('');
-  const [ email,setEmail] = useState ('')
+  const [ username,setEmail] = useState ('')
   const [ password, setPassword] = useState('')
   const [ success, setSuccess] = useState(false);
 
@@ -21,9 +21,9 @@ function App() {
   }
   const loginHandler = async(event) =>{
     event.preventDefault();
-    const article = {"email" : email,"password": password };
+    const article = {"username" : username,"password": password };
     console.log(article)
-    const response = await axios.post('https://reqres.in/api/login', article);
+    const response = await axios.post('https://localsearch-vrp.herokuapp.com/api/auth/login', article);
     if(response) setSuccess(true);
     setArticleId(response.data.token)
     console.log('res:   ', response.data.token)
@@ -31,7 +31,7 @@ function App() {
   }
 
 
-  console.log('email' , email)
+  console.log('username' , username)
   return (
       <div className="container">
           <form id='form-login' onSubmit={loginHandler} >
@@ -40,7 +40,7 @@ function App() {
               <input class ='form-username'
                 type='text' 
                 placeholder='Tên đăng nhập' 
-                value={email}
+                value={username}
                 onChange ={changeHandler}
               >   
               </input>

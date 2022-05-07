@@ -23,6 +23,8 @@ public class UserPrincipal implements UserDetails {
         return user;
     }
 
+
+
     public void setUser(User user) {
         this.user = user;
     }

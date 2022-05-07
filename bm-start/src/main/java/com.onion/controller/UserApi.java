@@ -4,10 +4,12 @@ import com.onion.config.jwt.UserDetailsServiceImpl;
 import com.onion.UserService;
 import com.onion.UserServiceImpl;
 import com.onion.config.jwt.JwtTokenProvider;
+import com.onion.config.jwt.UserPrincipal;
 import com.onion.entity.User;
 import com.onion.repository.UserRepository;
 import com.onion.request.LoginRequest;
 import com.onion.respone.JwtAuthenticationRespone;
+import io.jsonwebtoken.impl.DefaultClaims;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -16,17 +18,24 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping(path="api/auth")
 @RequiredArgsConstructor
+@CrossOrigin("htpp://localhost:3000")
 public class UserApi {
     @Autowired
     private UserRepository userRepository;
@@ -34,6 +43,7 @@ public class UserApi {
     private final UserService userService;
 
     private final UserDetailsServiceImpl userDetailsServiceimpl;
+
 
     @Autowired
     PasswordEncoder passwordEncoder;
@@ -68,7 +78,6 @@ public class UserApi {
         return ResponseEntity.ok(new JwtAuthenticationRespone(token));
     }
 
-    
     @GetMapping("/admin")
     public String forAdmin(){
         return "Hello Admin";
@@ -86,6 +95,21 @@ public class UserApi {
    /* public ResponseEntity<List<User>> getAllUsers(){
         return ResponseEntity.ok().body(userService.getAllUser());
     }*/
+    @GetMapping("/userinfo")
+    public Optional<User> getUser(@AuthenticationPrincipal UserDetails user){
+        String username = user.getUsername();
+        Optional<User> user123 =  userRepository.findByUsername(username);
+        return user123;
+    }
+    @GetMapping("/context")
+    public UserDetails getCurrentUserContext() {
+        SecurityContext context = SecurityContextHolder.getContext();
+        Authentication authentication = context.getAuthentication();
+        return ((UserDetails) authentication.getPrincipal());
+    }
+
+
+
 
 
 }

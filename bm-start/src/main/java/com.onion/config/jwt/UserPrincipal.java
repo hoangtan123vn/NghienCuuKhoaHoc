@@ -18,6 +18,15 @@ public class UserPrincipal implements UserDetails {
 
     private Collection<? extends GrantedAuthority> authorities;
 
+    private User user;
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
     public UserPrincipal(int id, String username, String password, Collection<? extends GrantedAuthority> authorities) {
         super();
         this.id = id;
@@ -31,6 +40,9 @@ public class UserPrincipal implements UserDetails {
         this.username = username;
         this.password = password;
         this.authorities = authorities;
+    }
+
+    public UserPrincipal() {
     }
 
     public static UserPrincipal create(User user) {

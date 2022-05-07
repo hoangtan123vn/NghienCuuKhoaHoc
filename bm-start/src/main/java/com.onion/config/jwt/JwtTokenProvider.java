@@ -21,6 +21,9 @@ public class JwtTokenProvider {
     @Value("${app.jwtExpirationInMs}")
     private int jwtExpirationInMs;
 
+    @Value("${app.jwtrefreshExpirationInMs}")
+    private int jwtrefreshExpirationInMs;
+
     public String generateToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
         Date now = new Date();
@@ -40,6 +43,27 @@ public class JwtTokenProvider {
                 .compact();
 
     }
+    public String doGenerateRefreshToken(UserDetails userDetails) {
+
+        Map<String, Object> claims = new HashMap<>();
+        Date now = new Date();
+        Collection<? extends GrantedAuthority> roles = userDetails.getAuthorities();
+        if (roles.contains(new SimpleGrantedAuthority("ADMIN"))) {
+            claims.put("isAdmin", true);
+        }
+        if (roles.contains(new SimpleGrantedAuthority("USER"))) {
+            claims.put("isUser", true);
+        }
+        // mã hóa token
+        return Jwts.builder().setClaims(claims)
+                .setSubject(userDetails.getUsername())
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + jwtExpirationInMs))
+                .signWith(SignatureAlgorithm.HS512, jwtSecret)
+                .compact();
+
+    }
+
 
     public int getUserIdFromJWT(String token) {
         Claims claims = Jwts.parser()

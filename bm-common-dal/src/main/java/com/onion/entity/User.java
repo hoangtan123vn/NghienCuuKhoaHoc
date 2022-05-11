@@ -22,9 +22,42 @@ public class User {
 
     private String password;
 
+    private String fullname;
+
+    private int age;
+
+    private String diachi;
+
     @ManyToOne
     @JoinColumn(name = "id_role")
     private Role role;
 
+    @OneToOne
+    @JoinColumn(name = "id_vehicle")
+    private Vehicle vehicle;
 
+
+    public User(String username,String password){
+        this.username = username;
+        this.password = password;
+    }
+
+    public User(String username,String password,String fullname,int age,String diachi){
+        this.username = username;
+        this.password = password;
+        this.fullname = fullname;
+        this.age = age;
+        this.diachi = diachi;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "iduser=" + iduser +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", role=" + role +
+                ", vehicle=" + vehicle +
+                '}';
+    }
 }

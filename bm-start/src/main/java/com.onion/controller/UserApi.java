@@ -3,8 +3,11 @@ package com.onion.controller;
 import com.onion.config.jwt.UserDetailsServiceImpl;
 import com.onion.UserService;
 import com.onion.config.jwt.JwtTokenProvider;
+import com.onion.entity.Role;
 import com.onion.entity.User;
+import com.onion.entity.Vehicle;
 import com.onion.repository.UserRepository;
+import com.onion.repository.VehicleRepository;
 import com.onion.request.LoginRequest;
 import com.onion.respone.JwtAuthenticationRespone;
 import lombok.RequiredArgsConstructor;
@@ -37,6 +40,9 @@ public class UserApi {
 
     private final UserDetailsServiceImpl userDetailsServiceimpl;
 
+    @Autowired
+    private VehicleRepository vehicleRepository;
+
 
     @Autowired
     PasswordEncoder passwordEncoder;
@@ -47,25 +53,28 @@ public class UserApi {
     @Autowired
     private final JwtTokenProvider jwtTokenProvider;
 
-    @PostMapping("/register")
-    public User Register(@RequestBody User user){
-        return userDetailsServiceimpl.save(user);
-    }
+//    @PostMapping("/register")
+//    public User Register(@RequestBody User user){
+//        return userDetailsServiceimpl.save(user);
+//    }
 
     @PostMapping("/login")
     public ResponseEntity<?> createAuthenticationToken(@RequestBody LoginRequest loginRequest) throws Exception {
         try {
+            System.out.println(loginRequest);
          /* Authentication authentication =*/   authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
           //  SecurityContextHolder.getContext().setAuthentication(authentication);
         } catch (DisabledException e) {
             throw new Exception("USER_DISABLED", e);
         } catch (BadCredentialsException e) {
             throw new Exception("INVALID_CREDENTIALS", e);
+        } catch (Exception e){
+            throw  new Exception("Loi ",e);
         }
         final UserDetails userDetails = userDetailsServiceimpl
                 .loadUserByUsername(loginRequest.getUsername());
 
-
+        System.out.println(userDetails);
         final String token = jwtTokenProvider.generateToken(userDetails);
 
         return ResponseEntity.ok(new JwtAuthenticationRespone(token));
@@ -101,4 +110,21 @@ public class UserApi {
         return ((UserDetails) authentication.getPrincipal());
     }
 
+    @PostMapping("/register")
+    public User addUser(){
+        User user = new User("admin",passwordEncoder.encode("admin"),"Hoang Tan",20,"109/12 Huynh Thi Hai,Quan 12,TPHCM");
+        Role role = new Role(1,"ADMIN");
+        Vehicle vehicle = new Vehicle(100,0,0);
+        user.setVehicle(vehicle);
+        user.setRole(role);
+        //vehicle.setUser(user);
+        vehicleRepository.save(vehicle);
+        return userRepository.save(user);
+    }
+
+    @PostMapping("/addvehicle")
+    public Vehicle addVehicle(@RequestBody Vehicle vehicle){
+        System.out.println(vehicle.toString());
+        return vehicleRepository.save(vehicle);
+    }
 }

@@ -2,7 +2,9 @@ package com.onion.config.jwt;
 
 import com.onion.entity.Role;
 import com.onion.entity.User;
+import com.onion.entity.Vehicle;
 import com.onion.repository.UserRepository;
+import com.onion.repository.VehicleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -20,6 +22,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private VehicleRepository vehicleRepository;
 
     @Override
     @Transactional
@@ -44,10 +49,13 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         Role role = new Role();
         role.setId_role(user.getRole().getId_role());
         role.setName_role(user.getRole().getName_role());
-      //  role.setName_role("ADMIN");
+        role.setName_role("ADMIN");
         newUser.setRole(role);
+      //  Vehicle vehicle = new Vehicle(100,0,0);
+      //  newUser.setVehicle(vehicle);
         return userRepository.save(newUser);
     }
+
 
 
 

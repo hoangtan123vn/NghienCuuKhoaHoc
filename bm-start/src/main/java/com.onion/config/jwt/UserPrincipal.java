@@ -2,6 +2,7 @@ package com.onion.config.jwt;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.onion.entity.User;
+import com.onion.entity.Vehicle;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,7 +17,15 @@ public class UserPrincipal implements UserDetails {
     @JsonIgnore
     private String password;
 
+    private String fullname;
+
+    private int age;
+
+    private String diachi;
+
     private Collection<? extends GrantedAuthority> authorities;
+
+    private Vehicle vehicle;
 
     private User user;
     public User getUser() {
@@ -24,17 +33,20 @@ public class UserPrincipal implements UserDetails {
     }
 
 
-
     public void setUser(User user) {
         this.user = user;
     }
 
-    public UserPrincipal(int id, String username, String password, Collection<? extends GrantedAuthority> authorities) {
+    public UserPrincipal(int id, String username, String password, String fullname , int age , String diachi, Collection<? extends GrantedAuthority> authorities , Vehicle vehicle) {
         super();
         this.id = id;
         this.username = username;
         this.password = password;
+        this.fullname = fullname;
+        this.age = age;
+        this.diachi = diachi;
         this.authorities = authorities;
+        this.vehicle = vehicle;
     }
 
     public UserPrincipal( String username, String password, Collection<? extends GrantedAuthority> authorities) {
@@ -49,7 +61,7 @@ public class UserPrincipal implements UserDetails {
 
     public static UserPrincipal create(User user) {
         GrantedAuthority authorities = new SimpleGrantedAuthority(user.getRole().getName_role());
-        return new UserPrincipal(Math.toIntExact(user.getIduser()), user.getUsername(), user.getPassword(), Collections.singleton(authorities));
+        return new UserPrincipal(Math.toIntExact(user.getIduser()), user.getUsername(), user.getPassword() , user.getFullname(),user.getAge(), user.getDiachi(), Collections.singleton(authorities), user.getVehicle());
     }
 
     @Override

@@ -17,5 +17,4 @@ public class Role {
     private int id_role;
     private String name_role;
 
-
 }

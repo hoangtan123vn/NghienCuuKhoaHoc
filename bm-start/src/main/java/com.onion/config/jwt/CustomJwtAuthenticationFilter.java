@@ -35,10 +35,10 @@ public class CustomJwtAuthenticationFilter extends OncePerRequestFilter {
         if (StringUtils.hasText(jwtToken) && jwtTokenProvider.validateToken(jwtToken)) {
             UserDetails userDetails = new User(jwtTokenProvider.getUserNameFromJwtToken(jwtToken),"",
                     jwtTokenProvider.getRolesFromToken(jwtToken));
-
+            System.out.println(userDetails);
             UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
                     userDetails, null, userDetails.getAuthorities());
-            System.out.println(userDetails);
+
             // After setting the Authentication in the context, we specify
             // that the current user is authenticated. So it passes the
             // Spring Security Configurations successfully.
@@ -47,9 +47,6 @@ public class CustomJwtAuthenticationFilter extends OncePerRequestFilter {
             System.out.println("Cannot set the Security Context");
         }
         chain.doFilter(request, response);
-
-
-
     }
 
     private String extractJwtFromRequest(HttpServletRequest request) {

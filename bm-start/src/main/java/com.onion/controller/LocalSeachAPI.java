@@ -2,7 +2,6 @@ package com.onion.controller;
 
 
 import com.onion.entity.Customer;
-import com.onion.entity.Vehicles;
 import com.onion.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;

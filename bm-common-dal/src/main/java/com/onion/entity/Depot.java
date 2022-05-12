@@ -1,19 +1,22 @@
 package com.onion.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name="depot")
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Depot {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private  int id_depot;
-    private  int x;
-    private  int y;
-    private  int demand;
-
+    public  int id_depot;
+    public  double lat;
+    public  double lng;
+    public  String address;
+    public  int demand;
 }

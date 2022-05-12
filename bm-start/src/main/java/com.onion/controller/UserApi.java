@@ -112,9 +112,9 @@ public class UserApi {
 
     @PostMapping("/register")
     public User addUser(){
-        User user = new User("admin",passwordEncoder.encode("admin"),"Hoang Tan",20,"109/12 Huynh Thi Hai,Quan 12,TPHCM");
-        Role role = new Role(1,"ADMIN");
-        Vehicle vehicle = new Vehicle(100,0,0);
+        User user = new User("user3",passwordEncoder.encode("user"),"Hoang Tan",20,"109/12 Huynh Thi Hai,Quan 12,TPHCM");
+        Role role = new Role(2,"USER");
+        Vehicle vehicle = new Vehicle(3,100,0,0);
         user.setVehicle(vehicle);
         user.setRole(role);
         //vehicle.setUser(user);

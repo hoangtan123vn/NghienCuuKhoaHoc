@@ -25,6 +25,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -127,4 +128,11 @@ public class UserApi {
         System.out.println(vehicle.toString());
         return vehicleRepository.save(vehicle);
     }
+
+
+
+
+
+
+
 }

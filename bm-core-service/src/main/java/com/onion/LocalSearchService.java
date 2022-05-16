@@ -1,10 +1,7 @@
 package com.onion;
 
 import com.google.maps.model.DistanceMatrix;
-import com.onion.entity.Depot;
-import com.onion.entity.Node;
-import com.onion.entity.Solution;
-import com.onion.entity.Vehicle;
+import com.onion.entity.*;
 import com.onion.repository.DepotRepository;
 import com.onion.repository.VehicleRepository;
 import lombok.var;
@@ -30,44 +27,44 @@ public class LocalSearchService {
     @Autowired
     DepotRepository depotRepository;
 
-    public void init() throws IOException, ParseException {
+    public ArrayList<Vehicle> init(ArrayList<Node> customers,Node depot,int Soluongxe) throws IOException, ParseException {
         //xe được lấy trong trong database (user)
         List<Vehicle> vehicles = vehicleRepository.findAll();
         //khởi tạo kho hàng
-        Node depot = new Node(0,"Nhà Thờ Đức Bà Sài Gòn",10.7797908,106.6968302,0);
+    //    Node depot = new Node(0,"Nhà Thờ Đức Bà Sài Gòn",10.7797908,106.6968302,0);
         //khởi tạo các khách hàng
-        ArrayList<Node> customers = new ArrayList<>();
-        Node customer1 = new Node(1,"Công viên Hoàng Văn Thụ",10.801711,106.665989,25);
-        Node customer2 = new Node(2,"Phố đi bộ Bùi Viện",10.767318,106.69424,20);
-        Node customer3 = new Node(3,"KEM SỐ 1 TRÀNG TIỀN",10.786834,106.665364,35);
-        Node customer4 = new Node(4,"Trường Đại học Công nghệ TP.HCM - HUTECH",10.801879,106.715198,5);
-        Node customer5 = new Node(5,"Lotte Cinema Cong Hoa",10.8013047,106.6535187,50);
-        Node customer6 = new Node(6,"Trường Đại học Sài Gòn",10.7599171,106.6800696,27);
-        Node customer7 = new Node(7,"AEON MALL Tan Phu Celadon",10.8008761,106.6168497,11);
-        Node customer8 = new Node(8,"Trường Đại học Kinh Tế TP.HCM - Cơ sở B",10.7610532,106.6661693,24);
-        Node customer9 = new Node(9,"Công Viên Gia Định",10.8109725,106.6741247,40);
-        Node customer10 = new Node(10,"Lotte Mart Go Vap",10.8384502,106.6712387,50);
-        Node customer11 = new Node(11,"Công ty TNHH Nhà Máy Bia Heineken Việt Nam",10.8666538,106.6465396,10);
-        Node customer12 = new Node(12,"Chợ Tân Chánh Hiệp",10.8537351,106.6174115,29);
-        Node customer13 = new Node(13,"Dinh Độc Lập",10.7710473,106.6965524,23);
-        Node customer14 = new Node(14,"Chợ Hạnh Thông Tây",10.8352924,106.6588331,62);
-        Node customer15 = new Node(15,"Siêu thị Bách hóa XANH 26/1 Nguyễn Thị Búp",10.8751563,106.6241216,38);
-        customers.add(customer1);
-        customers.add(customer2);
-        customers.add(customer3);
-        customers.add(customer4);
-        customers.add(customer5);
-        customers.add(customer6);
-        customers.add(customer7);
-        customers.add(customer8);
-        customers.add(customer9);
-        customers.add(customer10);
-        customers.add(customer11);
-        customers.add(customer12);
-        customers.add(customer13);
-        customers.add(customer14);
-        customers.add(customer15);
-        System.out.println(KhoangCachDuongDi("Nhà Thờ Đức Bà Sài Gòn","Trường Đại Học Sài Gòn"));
+//        ArrayList<Node> customers = new ArrayList<>();
+//        Node customer1 = new Node(1,"Công viên Hoàng Văn Thụ",10.801711,106.665989,25);
+//        Node customer2 = new Node(2,"Phố đi bộ Bùi Viện",10.767318,106.69424,20);
+//        Node customer3 = new Node(3,"KEM SỐ 1 TRÀNG TIỀN",10.786834,106.665364,35);
+//        Node customer4 = new Node(4,"Trường Đại học Công nghệ TP.HCM - HUTECH",10.801879,106.715198,5);
+//        Node customer5 = new Node(5,"Lotte Cinema Cong Hoa",10.8013047,106.6535187,50);
+//        Node customer6 = new Node(6,"Trường Đại học Sài Gòn",10.7599171,106.6800696,27);
+//        Node customer7 = new Node(7,"AEON MALL Tan Phu Celadon",10.8008761,106.6168497,11);
+//        Node customer8 = new Node(8,"Trường Đại học Kinh Tế TP.HCM - Cơ sở B",10.7610532,106.6661693,24);
+//        Node customer9 = new Node(9,"Công Viên Gia Định",10.8109725,106.6741247,40);
+//        Node customer10 = new Node(10,"Lotte Mart Go Vap",10.8384502,106.6712387,50);
+//        Node customer11 = new Node(11,"Công ty TNHH Nhà Máy Bia Heineken Việt Nam",10.8666538,106.6465396,10);
+//        Node customer12 = new Node(12,"Chợ Tân Chánh Hiệp",10.8537351,106.6174115,29);
+//        Node customer13 = new Node(13,"Dinh Độc Lập",10.7710473,106.6965524,23);
+//        Node customer14 = new Node(14,"Chợ Hạnh Thông Tây",10.8352924,106.6588331,62);
+//        Node customer15 = new Node(15,"Siêu thị Bách hóa XANH 26/1 Nguyễn Thị Búp",10.8751563,106.6241216,38);
+//        customers.add(customer1);
+//        customers.add(customer2);
+//        customers.add(customer3);
+//        customers.add(customer4);
+//        customers.add(customer5);
+//        customers.add(customer6);
+//        customers.add(customer7);
+//        customers.add(customer8);
+//        customers.add(customer9);
+//        customers.add(customer10);
+//        customers.add(customer11);
+//        customers.add(customer12);
+//        customers.add(customer13);
+//        customers.add(customer14);
+//        customers.add(customer15);
+//        System.out.println(KhoangCachDuongDi("Nhà Thờ Đức Bà Sài Gòn","Trường Đại Học Sài Gòn"));
 
 
         ArrayList <Node> nodes = new ArrayList<Node>();
@@ -79,11 +76,19 @@ public class LocalSearchService {
 
         Solution s = new Solution();
         ArrayList <Vehicle> rtList = s.vehicles;
-    //int numberofVehicles = vehicles.size();
-        for(Vehicle vehicle : vehicles){
-            rtList.add(vehicle);
+
+
+
+
+        for(int i=0;i< Soluongxe ;i++){
+            rtList.add(vehicles.get(i));
             System.out.println(rtList);
+
         }
+//        for(Vehicle vehicle : vehicles){
+//            rtList.add(vehicle);
+//            System.out.println(rtList);
+//        }
         //Cho tất cả khách hàng là chưa được tính trong tuyến đường
         for (int i = 0 ; i < customers.size(); i++)
         {
@@ -121,14 +126,31 @@ public class LocalSearchService {
 //        System.out.println("customers  : " + customers);
 //        System.out.println("depot : " + depot);
 //        System.out.println("rtList  : " + s);
+        LocalSearch(Soluongxe,rtList,customers,depot,s);
+        for (int j=0; j< Soluongxe; j++)
+        {
+            int vehicle_number = j+1;
+            System.out.println("Route for Vehicle #" + vehicle_number);
+            for (int k=0; k<s.vehicles.get(j).nodes.size(); k++)
+            {
+                System.out.print(s.vehicles.get(j).nodes.get(k).getId_customer() + "  ");
+            }
+            System.out.println("");
+            System.out.println("Route Cost = " + s.vehicles.get(j).cost);
+            System.out.println("Final Load: " + s.vehicles.get(j).loading);
+            System.out.println("Final Remaining Capacity = " + (rtList.get(j).capacity - s.vehicles.get(j).loading));
+            System.out.println("----------------------------------------");
 
-
-        LocalSearch(vehicles.size(),rtList,customers,depot,s);
+        }
+        System.out.println("Total Solution Cost = " + s.cost);
+      //  System.out.println(s.vehicles);
+     //   LocalSearchInterandInstra(vehicles.size(),rtList,s);
+        return s.vehicles;
 
     }
 
     public Long KhoangCachDuongDi(String source,String destination) throws IOException, ParseException {
-        String key = "AIzaSyDzkloRyjbS6J29Oxp4ZJiea8U-W0xlBT0";
+        String key = "AIzaSyAYnXN3D4gy-VBMdLJUN7gK_FLdvWAebrE";
         OkHttpClient client = new OkHttpClient().newBuilder()
                 .build();
         Request request = new Request.Builder()
@@ -214,10 +236,67 @@ public class LocalSearchService {
             }
         }
 
+
+
+    }
+    public void LocalSearchInterandInstra(int numberofVehicles,ArrayList<Vehicle> rtList,Solution s) throws IOException, ParseException {
+
+        //this is a boolean flag (true/false) for terminating the local search procedure
+        boolean terminationCondition = false;
+
+        //this is a counter for holding the local search iterator
+        int localSearchIterator = 0;
+
+        //Here we apply the best relocation move local search scheme
+        //This is an object for holding the best relocation move that can be applied to the candidate solution
+        RelocationMove rm = new RelocationMove(); // in order to apply one relocation  move for all routes - dont want to lose previous if i change vehicle
+
+        //Initialize the relocation move rm
+        rm.positionOfRelocated = -1;
+        rm.positionToBeInserted = -1;
+        rm.fromRoute = 0;
+        rm.toRoute = 0;
+        rm.fromMoveCost = Long.MAX_VALUE;
+        rm.toMoveCost = Long.MAX_VALUE;
+
+        // Until the termination condition is set to true repeat the following block of code
+        while (terminationCondition == false)
+        {
+            //With this function we look for the best relocation move
+            //the characteristics of this move will be stored in the object rm
+            findBestRelocationMove(rm, s, numberofVehicles);
+
+            // If rm (the identified best relocation move) is a cost improving move, or in other words
+            // if the current solution is not a local optimum
+            if (rm.moveCost < 0)
+            {
+                //This is a function applying the relocation move rm to the candidate solution
+                applyRelocationMove(rm, s);
+            }
+            else
+            {
+                //if no cost improving relocation move was found,
+                //or in other words if the current solution is a local optimum
+                //terminate the local search algorithm
+                terminationCondition = true;
+            }
+
+            localSearchIterator = localSearchIterator + 1;
+        }
+
+
+        /*
+         * ###########
+         * # RESULTS #
+         * ###########
+         * */
+
+
+        System.out.println("");
         for (int j=0; j<numberofVehicles; j++)
         {
             int vehicle_number = j+1;
-            System.out.println("Route for Vehicle #" + vehicle_number);
+            System.out.println("Updated Route for Vehicle #" + vehicle_number);
             for (int k=0; k<s.vehicles.get(j).nodes.size(); k++)
             {
                 System.out.print(s.vehicles.get(j).nodes.get(k).getId_customer() + "  ");
@@ -230,6 +309,142 @@ public class LocalSearchService {
 
         }
         System.out.println("Total Solution Cost = " + s.cost);
+        System.out.println("Total Local Search Iterations = " + localSearchIterator);
+        System.out.println("Total Local Search Relocations = " + (localSearchIterator-1));
+    }
+
+    private void findBestRelocationMove(RelocationMove rm, Solution s, int numberOfVehicles) throws IOException, ParseException {
+        //This is a variable that will hold the cost of the best relocation move
+        double bestMoveCost = Double.MAX_VALUE;
+
+        //We will iterate through all available vehicles
+
+        //Vehicles to relocate FROM
+        for (int from = 0; from<numberOfVehicles; from++)
+        {
+            // Vehicles to relocate TO
+            for (int to = 0; to<numberOfVehicles; to++)
+            {
+
+                for (int fromIndex = 1; fromIndex < s.vehicles.get(from).nodes.size() - 1; fromIndex++)
+                {
+                    //Node A is the predecessor of B
+                    Node A = s.vehicles.get(from).nodes.get(fromIndex - 1);
+
+                    //Node B is the relocated node
+                    Node B = s.vehicles.get(from).nodes.get(fromIndex);
+
+                    //Node C is the successor of B
+                    Node C = s.vehicles.get(from).nodes.get(fromIndex + 1);
+
+                    System.out.println("Node A " + A );
+                    System.out.println("Node B " + A );
+                    System.out.println("Node C " + A );
+
+                    //We will iterate through all possible re-insertion positions for B
+                    for (int afterIndex = 0; afterIndex < s.vehicles.get(to).nodes.size() -1; afterIndex ++)
+                    {
+
+                        if ((afterIndex != fromIndex && afterIndex != fromIndex - 1)||from != to)
+                        {
+                            //Node F the node after which B is going to be reinserted
+                            Node F = s.vehicles.get(to).nodes.get(afterIndex);
+                            System.out.println("Node F " + F );
+                            //Node G the successor of F
+                            Node G = s.vehicles.get(to).nodes.get(afterIndex + 1);
+                            System.out.println("Node G " + G );
+
+                            //The arcs A-B, B-C, and F-G break
+                            //double costRemovedFrom = distanceMatrix[A.ID][B.ID] + distanceMatrix[B.ID][C.ID];
+                            Long costRemovedFrom = KhoangCachDuongDi(A.getAddress(),B.getAddress()) + KhoangCachDuongDi(B.getAddress(),C.getAddress());;
+                            Long costRemovedTo = KhoangCachDuongDi(F.getAddress(),G.getAddress());
+                            //double costRemovedTo = distanceMatrix[F.ID][G.ID];
+
+                            //The arcs A-C, F-B and B-G are created
+                          //  double costAddedFrom = distanceMatrix[A.ID][C.ID];
+                            Long costAddedFrom = KhoangCachDuongDi(A.getAddress(),C.getAddress());
+                         //   double costAddedTo  = distanceMatrix[F.ID][B.ID] + distanceMatrix[B.ID][G.ID];
+                            Long costAddedTo = KhoangCachDuongDi(F.getAddress(),B.getAddress()) + KhoangCachDuongDi(B.getAddress(),G.getAddress());;
+                            //This is the cost of the move, or in other words
+                            //the change that this move will cause if applied to the current solution
+                            Long fromMoveCost = costAddedFrom - costRemovedFrom;
+                            Long toMoveCost = costAddedTo - costRemovedTo;
+
+
+
+                            //If this move is the best found so far
+                            Long moveCost = fromMoveCost+toMoveCost;
+                            if ((moveCost < bestMoveCost)&&(from == to || (s.vehicles.get(to).loading + s.vehicles.get(from).nodes.get(fromIndex).demand<=s.vehicles.get(to).capacity)))
+                            {
+                                //set the best cost equal to the cost of this solution
+                                bestMoveCost = moveCost;
+
+                                //store its characteristics
+                                rm.positionOfRelocated = fromIndex;
+                                rm.positionToBeInserted = afterIndex;
+                                rm.toMoveCost = toMoveCost;
+                                rm.fromMoveCost = fromMoveCost;
+                                rm.fromRoute = from;
+                                rm.toRoute = to;
+                                rm.moveCost = moveCost;
+                                if (from != to) {
+                                    rm.fromUpdLoad = s.vehicles.get(from).loading - s.vehicles.get(from).nodes.get(fromIndex).demand;
+                                    rm.toUpdLoad = s.vehicles.get(to).loading + s.vehicles.get(from).nodes.get(fromIndex).demand;
+                                }
+                                else {
+                                    rm.fromUpdLoad = s.vehicles.get(from).loading;
+                                    rm.toUpdLoad = s.vehicles.get(to).loading;
+                                }
+
+
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+
+    private static void applyRelocationMove(RelocationMove rm, Solution s)
+    {
+        //This is the node to be relocated
+        Node relocatedNode = s.vehicles.get(rm.fromRoute).nodes.get(rm.positionOfRelocated);
+
+        //Take out the relocated node
+        s.vehicles.get(rm.fromRoute).nodes.remove(rm.positionOfRelocated);
+
+        //Reinsert the relocated node into the appropriate position
+        //Where??? -> after the node that WAS (!!!!) located in the rm.positionToBeInserted of the route
+
+        //Watch out!!!
+        //If the relocated customer is reinserted backwards we have to re-insert it in (rm.positionToBeInserted + 1)
+        if (((rm.positionToBeInserted < rm.positionOfRelocated) && (rm.toRoute == rm.fromRoute))||(rm.toRoute!=rm.fromRoute))
+        {
+            s.vehicles.get(rm.toRoute).nodes.add(rm.positionToBeInserted + 1, relocatedNode);
+        }
+        ////else (if it is reinserted forward) we have to re-insert it in (rm.positionToBeInserted)
+        else
+        {
+            s.vehicles.get(rm.toRoute).nodes.add(rm.positionToBeInserted, relocatedNode);
+        }
+
+        System.out.println("FROM: Vehicle #" + (rm.fromRoute+1) + " Position: " + (rm.positionOfRelocated+1) + " --> Updated Load = " + rm.fromUpdLoad);
+        System.out.println("TO:   Vehicle #" + (rm.toRoute+1) + " Position: " + (rm.positionToBeInserted+1) + " --> Updated Load = " + rm.toUpdLoad);
+        System.out.println("--------------------------------------------------");
+
+
+        //update the cost of the solution and the corresponding cost of the route object in the solution
+        s.cost = s.cost + rm.moveCost;
+        s.vehicles.get(rm.toRoute).cost = s.vehicles.get(rm.toRoute).cost + rm.toMoveCost;
+        s.vehicles.get(rm.fromRoute).cost = s.vehicles.get(rm.fromRoute).cost + rm.fromMoveCost;
+        if  (rm.toRoute != rm.fromRoute) {
+            s.vehicles.get(rm.toRoute).loading = rm.toUpdLoad;
+            s.vehicles.get(rm.fromRoute).loading = rm.fromUpdLoad;
+        }
+        else {
+            s.vehicles.get(rm.toRoute).loading = rm.toUpdLoad;
+        }
 
     }
 

@@ -26,7 +26,7 @@ public class User {
 
     private int age;
 
-    private String diachi;
+    private String address;
 
     @ManyToOne
     @JoinColumn(name = "id_role")
@@ -42,12 +42,12 @@ public class User {
         this.password = password;
     }
 
-    public User(String username,String password,String fullname,int age,String diachi){
+    public User(String username,String password,String fullname,int age,String address){
         this.username = username;
         this.password = password;
         this.fullname = fullname;
         this.age = age;
-        this.diachi = diachi;
+        this.address = address;
     }
 
     @Override

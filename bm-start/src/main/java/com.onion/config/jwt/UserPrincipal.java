@@ -21,7 +21,7 @@ public class UserPrincipal implements UserDetails {
 
     private int age;
 
-    private String diachi;
+    private String address;
 
     private Collection<? extends GrantedAuthority> authorities;
 
@@ -37,14 +37,14 @@ public class UserPrincipal implements UserDetails {
         this.user = user;
     }
 
-    public UserPrincipal(int id, String username, String password, String fullname , int age , String diachi, Collection<? extends GrantedAuthority> authorities , Vehicle vehicle) {
+    public UserPrincipal(int id, String username, String password, String fullname , int age , String address, Collection<? extends GrantedAuthority> authorities , Vehicle vehicle) {
         super();
         this.id = id;
         this.username = username;
         this.password = password;
         this.fullname = fullname;
         this.age = age;
-        this.diachi = diachi;
+        this.address = address;
         this.authorities = authorities;
         this.vehicle = vehicle;
     }
@@ -61,7 +61,7 @@ public class UserPrincipal implements UserDetails {
 
     public static UserPrincipal create(User user) {
         GrantedAuthority authorities = new SimpleGrantedAuthority(user.getRole().getName_role());
-        return new UserPrincipal(Math.toIntExact(user.getIduser()), user.getUsername(), user.getPassword() , user.getFullname(),user.getAge(), user.getDiachi(), Collections.singleton(authorities), user.getVehicle());
+        return new UserPrincipal(Math.toIntExact(user.getIduser()), user.getUsername(), user.getPassword() , user.getFullname(),user.getAge(), user.getAddress(), Collections.singleton(authorities), user.getVehicle());
     }
 
     @Override

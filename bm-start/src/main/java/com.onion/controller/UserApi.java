@@ -32,7 +32,6 @@ import java.util.Optional;
 @RestController
 @RequestMapping(path="api/auth")
 @RequiredArgsConstructor
-@CrossOrigin("htpp://localhost:3000")
 public class UserApi {
     @Autowired
     private UserRepository userRepository;
@@ -113,9 +112,9 @@ public class UserApi {
 
     @PostMapping("/register")
     public User addUser(){
-        User user = new User("user3",passwordEncoder.encode("user"),"Hoang Tan",20,"109/12 Huynh Thi Hai,Quan 12,TPHCM");
+        User user = new User("user14",passwordEncoder.encode("user"),"Duy Hưng",18,"109/12 Huynh Thi Hai,Quan 12,TPHCM");
         Role role = new Role(2,"USER");
-        Vehicle vehicle = new Vehicle(3,100,0,0);
+        Vehicle vehicle = new Vehicle(14,100,0,0,true);
         user.setVehicle(vehicle);
         user.setRole(role);
         //vehicle.setUser(user);
@@ -127,6 +126,18 @@ public class UserApi {
     public Vehicle addVehicle(@RequestBody Vehicle vehicle){
         System.out.println(vehicle.toString());
         return vehicleRepository.save(vehicle);
+    }
+
+    @PostMapping("/refresh")
+    public String RefreshDriver(){
+        List<Vehicle> vehicles = vehicleRepository.findAll();
+        for(Vehicle vehicle : vehicles){
+            vehicle.setStatus(false);
+            vehicle.setLoading(0);
+            vehicle.setCost(0);
+            Vehicle updateVehicle = vehicleRepository.save(vehicle);
+        }
+        return "Refresh status thành công";
     }
 
 

@@ -44,6 +44,7 @@ public class LocalSeachAPI {
 
     @GetMapping("/test")
     public String test() throws IOException, ParseException {
+       System.out.println(localSearchService.KhoangCachDuongDi("Nhà Thờ Đức Bà","Dinh Độc Lập"));
         return "hello";
     }
 
@@ -85,9 +86,31 @@ public class LocalSeachAPI {
 //            depot.setDemand(depots.getDemand());
 //        }
         ArrayList<Vehicle> vehicle = localSearchService.init(node,depot,lsRequest.getSoluongxe());
-        System.out.println(vehicle);
+        System.out.println("xe" + vehicle);
+        for(Vehicle vehicle1 : vehicle){
+            if(vehicle1.getCost() > 0){
+                Vehicle updateVehicle = new Vehicle();
+                updateVehicle.setId_vehicle(vehicle1.getId_vehicle());
+                updateVehicle.setCapacity(vehicle1.getCapacity());
+                updateVehicle.setCost(vehicle1.getCost());
+                updateVehicle.setLoading(vehicle1.getLoading());
+                updateVehicle.setStatus(true);
+                vehicleRepository.save(updateVehicle);
+            }
+
+        }
         return vehicle;
     }
+
+//    @PostMapping("/refresh")
+//    public String RefreshDriver(){
+//        List<Vehicle> vehicles = vehicleRepository.findAll();
+//        for(Vehicle vehicle : vehicles){
+//            vehicle.setStatus(false);
+//            Vehicle updateVehicle = vehicleRepository.save(vehicle);
+//        }
+//        return "Refresh status thành công";
+//    }
 
 
 

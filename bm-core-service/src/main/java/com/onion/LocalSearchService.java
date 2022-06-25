@@ -83,7 +83,6 @@ public class LocalSearchService {
         for(int i=0;i< Soluongxe ;i++){
             rtList.add(vehicles.get(i));
             System.out.println(rtList);
-
         }
 //        for(Vehicle vehicle : vehicles){
 //            rtList.add(vehicle);
@@ -127,6 +126,7 @@ public class LocalSearchService {
 //        System.out.println("depot : " + depot);
 //        System.out.println("rtList  : " + s);
         LocalSearch(Soluongxe,rtList,customers,depot,s);
+       // LocalSearchInterandInstra(Soluongxe,rtList,s);
         for (int j=0; j< Soluongxe; j++)
         {
             int vehicle_number = j+1;
@@ -150,7 +150,7 @@ public class LocalSearchService {
     }
 
     public Long KhoangCachDuongDi(String source,String destination) throws IOException, ParseException {
-        String key = "AIzaSyAYnXN3D4gy-VBMdLJUN7gK_FLdvWAebrE";
+        String key = "AIzaSyDM10NwPTV4vUMch7QqNg0UQkES7mceDRw";
         OkHttpClient client = new OkHttpClient().newBuilder()
                 .build();
         Request request = new Request.Builder()
@@ -369,9 +369,9 @@ public class LocalSearchService {
                             //the change that this move will cause if applied to the current solution
                             Long fromMoveCost = costAddedFrom - costRemovedFrom;
                             Long toMoveCost = costAddedTo - costRemovedTo;
-
-
-
+                            System.out.println(s.vehicles.get(to).loading);
+                            System.out.println(s.vehicles.get(from).nodes.get(fromIndex).demand);
+                            System.out.println(s.vehicles.get(to).capacity);
                             //If this move is the best found so far
                             Long moveCost = fromMoveCost+toMoveCost;
                             if ((moveCost < bestMoveCost)&&(from == to || (s.vehicles.get(to).loading + s.vehicles.get(from).nodes.get(fromIndex).demand<=s.vehicles.get(to).capacity)))

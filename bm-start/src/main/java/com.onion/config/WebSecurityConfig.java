@@ -59,7 +59,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOriginPatterns(Collections.singletonList("*"));
         //configuration.setAllowedOrigins(Arrays.asList("*"));
-        configuration.setAllowedMethods(Arrays.asList("GET","POST"));
+        configuration.setAllowedMethods(Arrays.asList("GET","POST","PUT"));
         configuration.setAllowCredentials(true);
         //configuration.setAllowedOriginPatterns(Collections.singletonList("*"));
         //the below three lines will add the relevant CORS response headers
@@ -88,8 +88,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
       http.cors().configurationSource(corsConfigurationSource()).and()
               .csrf().disable()
-		.authorizeRequests().antMatchers("/api/auth/admin","/api/auth/userinfo","/api/localsearch/add/location").hasRole("ADMIN")
-		.antMatchers("/api/auth/user","/api/auth/userinfo").hasAnyRole("USER","ADMIN")
+		.authorizeRequests().antMatchers("/api/auth/admin","/api/auth/userinfo","/api/localsearch/add/location","/api/auth/refresh").hasRole("ADMIN")
+		.antMatchers("/api/auth/user","/api/auth/userinfo","/api/auth/refresh").hasAnyRole("USER","ADMIN")
 		.antMatchers("/api/auth/login","/api/auth/register").permitAll().anyRequest().authenticated()
 
 		//if any exception occurs call this

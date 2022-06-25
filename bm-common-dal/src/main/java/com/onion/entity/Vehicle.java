@@ -28,6 +28,9 @@ public class Vehicle {
 
     public int loading;
 
+    public boolean status;
+
+
     @Transient
     public ArrayList<Node> nodes = new ArrayList<>();
 
@@ -54,6 +57,13 @@ public class Vehicle {
         this.loading = loading;
     }
 
+    public Vehicle(int id_vehicle,int capacity, int cost ,int loading,boolean status){
+        this.id_vehicle = id_vehicle;
+        this.capacity = capacity;
+        this.cost = cost;
+        this.loading = loading;
+        this.status = status;
+    }
 
 
 

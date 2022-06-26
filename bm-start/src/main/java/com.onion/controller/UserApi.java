@@ -24,8 +24,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -62,14 +60,15 @@ public class UserApi {
     public ResponseEntity<?> createAuthenticationToken(@RequestBody LoginRequest loginRequest) throws Exception {
         try {
             System.out.println(loginRequest);
-         /* Authentication authentication =*/   authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
-          //  SecurityContextHolder.getContext().setAuthentication(authentication);
+            /* Authentication authentication =*/
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
+            //  SecurityContextHolder.getContext().setAuthentication(authentication);
         } catch (DisabledException e) {
             throw new Exception("USER_DISABLED", e);
         } catch (BadCredentialsException e) {
             throw new Exception("INVALID_CREDENTIALS", e);
-        } catch (Exception e){
-            throw  new Exception("Loi ",e);
+        } catch (Exception e) {
+            throw new Exception("Loi ", e);
         }
         final UserDetails userDetails = userDetailsServiceimpl
                 .loadUserByUsername(loginRequest.getUsername());
@@ -81,28 +80,30 @@ public class UserApi {
     }
 
     @GetMapping("/admin")
-    public String forAdmin(){
+    public String forAdmin() {
         return "Hello Admin";
     }
 
     @GetMapping("/user")
-    public String forUser(){
+    public String forUser() {
         return "Hello User";
     }
 
     @GetMapping("/users")
-    public List<User> getAllUser(){
+    public List<User> getAllUser() {
         return userService.getAllUser();
     }
-   /* public ResponseEntity<List<User>> getAllUsers(){
-        return ResponseEntity.ok().body(userService.getAllUser());
-    }*/
+
+    /* public ResponseEntity<List<User>> getAllUsers(){
+         return ResponseEntity.ok().body(userService.getAllUser());
+     }*/
     @GetMapping("/userinfo")
-    public Optional<User> getUser(@AuthenticationPrincipal UserDetails user){
+    public Optional<User> getUser(@AuthenticationPrincipal UserDetails user) {
         String username = user.getUsername();
-        Optional<User> user123 =  userRepository.findByUsername(username);
+        Optional<User> user123 = userRepository.findByUsername(username);
         return user123;
     }
+
     @GetMapping("/context")
     public UserDetails getCurrentUserContext() {
         SecurityContext context = SecurityContextHolder.getContext();
@@ -111,10 +112,10 @@ public class UserApi {
     }
 
     @PostMapping("/register")
-    public User addUser(){
-        User user = new User("user14",passwordEncoder.encode("user"),"Duy Hưng",18,"109/12 Huynh Thi Hai,Quan 12,TPHCM");
-        Role role = new Role(2,"USER");
-        Vehicle vehicle = new Vehicle(14,100,0,0,true);
+    public User addUser() {
+        User user = new User("user14", passwordEncoder.encode("user"), "Duy Hưng", 18, "109/12 Huynh Thi Hai,Quan 12,TPHCM");
+        Role role = new Role(2, "USER");
+        Vehicle vehicle = new Vehicle(14, 100, 0, 0, true);
         user.setVehicle(vehicle);
         user.setRole(role);
         //vehicle.setUser(user);
@@ -123,15 +124,15 @@ public class UserApi {
     }
 
     @PostMapping("/addvehicle")
-    public Vehicle addVehicle(@RequestBody Vehicle vehicle){
+    public Vehicle addVehicle(@RequestBody Vehicle vehicle) {
         System.out.println(vehicle.toString());
         return vehicleRepository.save(vehicle);
     }
 
     @PostMapping("/refresh")
-    public String RefreshDriver(){
+    public String RefreshDriver() {
         List<Vehicle> vehicles = vehicleRepository.findAll();
-        for(Vehicle vehicle : vehicles){
+        for (Vehicle vehicle : vehicles) {
             vehicle.setStatus(false);
             vehicle.setLoading(0);
             vehicle.setCost(0);
@@ -140,10 +141,19 @@ public class UserApi {
         return "Refresh status thành công";
     }
 
-
-
-
-
-
-
+    @PutMapping("/vehicle/{id}")
+    public Vehicle updateVehicle(
+            @PathVariable(value = "id") Long id_vehicle, @RequestBody Vehicle vehicle) {
+        Vehicle updateVehicle = vehicleRepository.findById(Math.toIntExact(id_vehicle)).orElse(null);
+        updateVehicle.setStatus(vehicle.isStatus());
+        updateVehicle.setLoading(0);
+        updateVehicle.setCost(0);
+        return vehicleRepository.save(updateVehicle);
+    }
 }
+
+
+
+
+
+

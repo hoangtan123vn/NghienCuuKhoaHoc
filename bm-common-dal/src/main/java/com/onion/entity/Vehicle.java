@@ -67,10 +67,8 @@ public class Vehicle {
 
 
 
-
     public boolean CheckIfFits(int dem) //Check if we have Capacity Violation
     {
         return ((loading + dem <= capacity));
     }
-
 }

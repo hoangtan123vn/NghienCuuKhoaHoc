@@ -24,6 +24,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -112,10 +114,19 @@ public class UserApi {
     }
 
     @PostMapping("/register")
-    public User addUser() {
-        User user = new User("user14", passwordEncoder.encode("user"), "Duy Hưng", 18, "109/12 Huynh Thi Hai,Quan 12,TPHCM");
+    public User addUser(@RequestBody User newUser) {
+        System.out.println(newUser.getUsername());
+        System.out.println(newUser.getPassword());
+        System.out.println(newUser.getVehicle().getId_vehicle());
+        User user = new User(newUser.getUsername(), passwordEncoder.encode(newUser.getPassword()), newUser.getFullname(), newUser.getAge(), newUser.getAddress(), newUser.getPhonenumber());
         Role role = new Role(2, "USER");
-        Vehicle vehicle = new Vehicle(14, 100, 0, 0, true);
+        Vehicle vehicle = null;
+        if(newUser.getVehicle().getId_vehicle() == 1){
+            vehicle = new Vehicle(100, 0, false);
+        }
+        else if(newUser.getVehicle().getId_vehicle() == 2){
+            vehicle = new Vehicle(500, 0, false);
+        }
         user.setVehicle(vehicle);
         user.setRole(role);
         //vehicle.setUser(user);
@@ -130,16 +141,19 @@ public class UserApi {
     }
 
     @PostMapping("/refresh")
-    public String RefreshDriver() {
-        List<Vehicle> vehicles = vehicleRepository.findAll();
-        for (Vehicle vehicle : vehicles) {
-            vehicle.setStatus(false);
-            vehicle.setLoading(0);
-            vehicle.setCost(0);
-            Vehicle updateVehicle = vehicleRepository.save(vehicle);
+    public List<User> RefreshDriver() {
+        List<User> users = userService.getAllUser();
+        List<User> updatedUser = new ArrayList<>();
+        for (User user : users) {
+            user.getVehicle().setStatus(false);
+            user.getVehicle().setLoading(0);
+            user.getVehicle().setCost(0);
+            userRepository.save(user);
+            updatedUser.add(user);
         }
-        return "Refresh status thành công";
+        return updatedUser;
     }
+
 
     @PutMapping("/vehicle/{id}")
     public Vehicle updateVehicle(

@@ -27,9 +27,21 @@ public class LocalSearchService {
     @Autowired
     DepotRepository depotRepository;
 
-    public ArrayList<Vehicle> init(ArrayList<Node> customers,Node depot,int Soluongxe) throws IOException, ParseException {
+    public ArrayList<Vehicle> init(ArrayList<Node> customers,Node depot,int Capacity) throws IOException, ParseException {
         //xe được lấy trong trong database (user)
-        List<Vehicle> vehicles = vehicleRepository.findAll();
+        List<Vehicle> vehicles = vehicleRepository.getVehiclesByStatusFalse();
+        List<Vehicle> vehiclesCapacity = new ArrayList<>();
+        for(Vehicle vehicle : vehicles){
+            if(vehicle.getCapacity() == Capacity){
+                vehiclesCapacity.add(vehicle);
+            }
+            else if(Capacity == 1){
+                vehiclesCapacity.add(vehicle);
+            }
+        }
+        System.out.println(vehiclesCapacity);
+
+
         //khởi tạo kho hàng
     //    Node depot = new Node(0,"Nhà Thờ Đức Bà Sài Gòn",10.7797908,106.6968302,0);
         //khởi tạo các khách hàng
@@ -80,9 +92,10 @@ public class LocalSearchService {
 
 
 
-        for(int i=0;i< Soluongxe ;i++){
-            rtList.add(vehicles.get(i));
-            System.out.println(rtList);
+        for(int i=0;i< vehiclesCapacity.size();i++){
+                rtList.add(vehiclesCapacity.get(i));
+                //System.out.println(vehicles.get(i).isStatus());
+                System.out.println(rtList);
         }
 //        for(Vehicle vehicle : vehicles){
 //            rtList.add(vehicle);
@@ -125,9 +138,9 @@ public class LocalSearchService {
 //        System.out.println("customers  : " + customers);
 //        System.out.println("depot : " + depot);
 //        System.out.println("rtList  : " + s);
-        LocalSearch(Soluongxe,rtList,customers,depot,s);
+        LocalSearch(vehiclesCapacity.size(), rtList,customers,depot,s);
        // LocalSearchInterandInstra(Soluongxe,rtList,s);
-        for (int j=0; j< Soluongxe; j++)
+        for (int j=0; j< vehiclesCapacity.size(); j++)
         {
             int vehicle_number = j+1;
             System.out.println("Route for Vehicle #" + vehicle_number);
@@ -150,7 +163,7 @@ public class LocalSearchService {
     }
 
     public Long KhoangCachDuongDi(String source,String destination) throws IOException, ParseException {
-        String key = "AIzaSyCZHapAmb96XhPvqBVuX58R-o9Cwxro9dI";
+        String key = "AIzaSyCkyruhKSYxXABYVzFEHLpehHBbDmdHVfU";
         OkHttpClient client = new OkHttpClient().newBuilder()
                 .build();
         Request request = new Request.Builder()

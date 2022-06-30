@@ -85,7 +85,7 @@ public class LocalSeachAPI {
 //            depot.setLat(depots.getLat());
 //            depot.setDemand(depots.getDemand());
 //        }
-        ArrayList<Vehicle> vehicle = localSearchService.init(node,depot,lsRequest.getSoluongxe());
+        ArrayList<Vehicle> vehicle = localSearchService.init(node,depot,lsRequest.getCapacity());
         System.out.println("xe" + vehicle);
         for(Vehicle vehicle1 : vehicle){
             if(vehicle1.getCost() > 0){

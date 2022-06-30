@@ -20,6 +20,7 @@ import java.util.List;
 public class Vehicle {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public int id_vehicle;
 
     public int capacity;
@@ -62,6 +63,12 @@ public class Vehicle {
         this.capacity = capacity;
         this.cost = cost;
         this.loading = loading;
+        this.status = status;
+    }
+
+    public Vehicle(int capacity, int cost ,boolean status){
+        this.capacity = capacity;
+        this.cost = cost;
         this.status = status;
     }
 

@@ -28,6 +28,8 @@ public class User {
 
     private String address;
 
+    private long phonenumber;
+
     @ManyToOne
     @JoinColumn(name = "id_role")
     private Role role;
@@ -48,6 +50,14 @@ public class User {
         this.fullname = fullname;
         this.age = age;
         this.address = address;
+    }
+    public User(String username,String password,String fullname,int age,String address,long phonenumber){
+        this.username = username;
+        this.password = password;
+        this.fullname = fullname;
+        this.age = age;
+        this.address = address;
+        this.phonenumber = phonenumber;
     }
 
     @Override

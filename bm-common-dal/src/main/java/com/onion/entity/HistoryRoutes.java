@@ -18,7 +18,7 @@ import java.util.List;
 public class HistoryRoutes {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     public int id_route;
 
     public Date time;
@@ -34,7 +34,6 @@ public class HistoryRoutes {
 
     @ManyToOne
     @JoinColumn(name="id_vehicle")
-    @JsonIgnore
     public Vehicle vehicle;
 
 

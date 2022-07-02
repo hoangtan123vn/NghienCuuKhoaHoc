@@ -3,10 +3,7 @@ package com.onion.controller;
 import com.onion.config.jwt.UserDetailsServiceImpl;
 import com.onion.UserService;
 import com.onion.config.jwt.JwtTokenProvider;
-import com.onion.entity.HistoryRoutes;
-import com.onion.entity.Role;
-import com.onion.entity.User;
-import com.onion.entity.Vehicle;
+import com.onion.entity.*;
 import com.onion.repository.HistoryRouteRepository;
 import com.onion.repository.UserRepository;
 import com.onion.repository.VehicleRepository;
@@ -192,8 +189,19 @@ public class UserApi {
         updatehistoryroutes.setTime(historyRoutes.getTime());
         updatehistoryroutes.setVehicle(historyRoutes.getVehicle());
         updatehistoryroutes.setStatus_route(historyRoutes.isStatus_route());
+//        for(Node node : historyRoutes.getNodes()) {
+//            Node updatedNode = new Node();
+//            updatedNode.setId_node(node.getId_node());
+//            updatedNode.setLng(node.getLng());
+//            updatedNode.setLat(node.getLat());
+//        }
         return historyRouteRepository.save(updatehistoryroutes);
     }
+
+//    @GetMapping("/getInfohostoryRoutes/{id}")
+//    public HistoryRoutes getInfoHistoryRoutes(@PathVariable(value = "id"),int id_route){
+//
+//    }
 
 
 }

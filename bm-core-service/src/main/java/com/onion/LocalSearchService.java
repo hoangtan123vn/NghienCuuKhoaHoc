@@ -146,7 +146,7 @@ public class LocalSearchService {
             System.out.println("Route for Vehicle #" + vehicle_number);
             for (int k=0; k<s.vehicles.get(j).nodes.size(); k++)
             {
-                System.out.print(s.vehicles.get(j).nodes.get(k).getId_customer() + "  ");
+                System.out.print(s.vehicles.get(j).nodes.get(k).getId_node() + "  ");
             }
             System.out.println("");
             System.out.println("Route Cost = " + s.vehicles.get(j).cost);
@@ -163,7 +163,7 @@ public class LocalSearchService {
     }
 
     public Long KhoangCachDuongDi(String source,String destination) throws IOException, ParseException {
-        String key = "AIzaSyCkyruhKSYxXABYVzFEHLpehHBbDmdHVfU";
+        String key = "AIzaSyBQjfMNNSah-WA5HhG0JAlQYggOQrlhH3o";
         OkHttpClient client = new OkHttpClient().newBuilder()
                 .build();
         Request request = new Request.Builder()
@@ -188,7 +188,7 @@ public class LocalSearchService {
         int notInserted = customers.size();
         for (int j=0; j < numberofVehicles; j++)
         {
-            ArrayList <Node> nodeSequence = rtList.get(j).nodes;
+            ArrayList<Node> nodeSequence = rtList.get(j).nodes;
             nodeSequence.add(depot);
             int capacity = rtList.get(j).capacity; // Sức chứa của mỗi xe (=50)
             int load = rtList.get(j).loading; // Tải trọng ban đầu của chiếc xe (=0)
@@ -312,7 +312,7 @@ public class LocalSearchService {
             System.out.println("Updated Route for Vehicle #" + vehicle_number);
             for (int k=0; k<s.vehicles.get(j).nodes.size(); k++)
             {
-                System.out.print(s.vehicles.get(j).nodes.get(k).getId_customer() + "  ");
+                System.out.print(s.vehicles.get(j).nodes.get(k).getId_node() + "  ");
             }
             System.out.println("");
             System.out.println("Route Cost = " + s.vehicles.get(j).cost);

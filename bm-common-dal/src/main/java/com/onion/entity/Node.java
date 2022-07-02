@@ -1,12 +1,19 @@
 package com.onion.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
+import javax.persistence.*;
+
 @Data
+@Entity
+@Table(name="node")
 public class Node{
 
-    public int id_customer;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    public int id_node;
 
     @JsonProperty("address")
     public String address;
@@ -16,12 +23,20 @@ public class Node{
     public double lng;
     @JsonProperty("demand")
     public int demand;
+
+    @Column(name="routed")
     public boolean isRouted;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="id_route")
+    @JsonIgnore
+    public HistoryRoutes historyRoutes;
+
     public Node() {
 
     }
-    public Node(int id_customer,String address,double lat,double lng,int demand){
-        this.id_customer = id_customer;
+    public Node(int node,String address,double lat,double lng,int demand){
+        this.id_node = id_node;
         this.address = address;
         this.lat = lat;
         this.lng = lng;

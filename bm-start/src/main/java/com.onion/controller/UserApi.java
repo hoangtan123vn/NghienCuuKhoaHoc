@@ -3,9 +3,11 @@ package com.onion.controller;
 import com.onion.config.jwt.UserDetailsServiceImpl;
 import com.onion.UserService;
 import com.onion.config.jwt.JwtTokenProvider;
+import com.onion.entity.HistoryRoutes;
 import com.onion.entity.Role;
 import com.onion.entity.User;
 import com.onion.entity.Vehicle;
+import com.onion.repository.HistoryRouteRepository;
 import com.onion.repository.UserRepository;
 import com.onion.repository.VehicleRepository;
 import com.onion.request.LoginRequest;
@@ -25,6 +27,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.SQLDataException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -52,6 +55,9 @@ public class UserApi {
 
     @Autowired
     private final JwtTokenProvider jwtTokenProvider;
+
+    @Autowired
+    HistoryRouteRepository historyRouteRepository;
 
 //    @PostMapping("/register")
 //    public User Register(@RequestBody User user){
@@ -114,10 +120,7 @@ public class UserApi {
     }
 
     @PostMapping("/register")
-    public User addUser(@RequestBody User newUser) {
-        System.out.println(newUser.getUsername());
-        System.out.println(newUser.getPassword());
-        System.out.println(newUser.getVehicle().getId_vehicle());
+    public User addUser(@RequestBody User newUser) throws Exception {
         User user = new User(newUser.getUsername(), passwordEncoder.encode(newUser.getPassword()), newUser.getFullname(), newUser.getAge(), newUser.getAddress(), newUser.getPhonenumber());
         Role role = new Role(2, "USER");
         Vehicle vehicle = null;
@@ -164,6 +167,35 @@ public class UserApi {
         updateVehicle.setCost(0);
         return vehicleRepository.save(updateVehicle);
     }
+
+    @GetMapping("/vehicle/{id}")
+    public List<HistoryRoutes> GetHistoryRoutes(@PathVariable(value = "id") Long id_vehicle){
+        Vehicle findVehicle = vehicleRepository.findById(Math.toIntExact(id_vehicle)).orElse(null);
+        System.out.println(findVehicle);
+        List<HistoryRoutes> ListhistoryRoutes = historyRouteRepository.findAllByVehicle(findVehicle);
+        return ListhistoryRoutes;
+    }
+
+
+    @GetMapping("/gethistoryRoutes/{id}")
+    public HistoryRoutes getHistoryRoutes(@PathVariable(value = "id") int id_route){
+    HistoryRoutes updateHistoryRoutes = historyRouteRepository.findById(id_route).orElse(null);
+    return updateHistoryRoutes;
+    }
+
+    @PostMapping("/newhistoryRoutes")
+    public HistoryRoutes addHistoryRoutes(@RequestBody HistoryRoutes historyRoutes){
+        HistoryRoutes updatehistoryroutes = new HistoryRoutes();
+        updatehistoryroutes.setLoading_route(historyRoutes.getLoading_route());
+        updatehistoryroutes.setCapacity_route(historyRoutes.getLoading_route());
+        updatehistoryroutes.setCost_route(historyRoutes.getCost_route());
+        updatehistoryroutes.setTime(historyRoutes.getTime());
+        updatehistoryroutes.setVehicle(historyRoutes.getVehicle());
+        updatehistoryroutes.setStatus_route(historyRoutes.isStatus_route());
+        return historyRouteRepository.save(updatehistoryroutes);
+    }
+
+
 }
 
 

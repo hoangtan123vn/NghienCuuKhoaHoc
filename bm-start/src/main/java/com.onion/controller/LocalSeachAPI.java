@@ -3,11 +3,10 @@ package com.onion.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.onion.LocalSearchService;
-import com.onion.entity.Depot;
-import com.onion.entity.ListNode;
-import com.onion.entity.Node;
-import com.onion.entity.Vehicle;
+import com.onion.entity.*;
 import com.onion.repository.DepotRepository;
+import com.onion.repository.HistoryRouteRepository;
+import com.onion.repository.NodeRepository;
 import com.onion.repository.VehicleRepository;
 import com.onion.request.LSRequest;
 import org.json.simple.parser.ParseException;
@@ -17,8 +16,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.lang.reflect.Array;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -33,6 +34,15 @@ public class LocalSeachAPI {
 
     @Autowired
     VehicleRepository vehicleRepository;
+
+    @Autowired
+    HistoryRouteRepository historyRouteRepository;
+
+    @Autowired
+    NodeRepository nodeRepository;
+
+
+
 
 //    @Autowired
 //    CustomerRepository customerRepository;
@@ -55,7 +65,7 @@ public class LocalSeachAPI {
         int i = 1;
         for(Node nodes : lsRequest.getNode()){
             Node node1 = new Node();
-            node1.setId_customer(i);
+            node1.setId_node(i);
             node1.setAddress(nodes.getAddress());
             node1.setLat(nodes.getLat());
             node1.setLng(nodes.getLng());
@@ -67,7 +77,7 @@ public class LocalSeachAPI {
         }
 
         for(Node nodes1 : lsRequest.getDepot()){
-            depot.setId_customer(nodes1.getId_customer());
+            depot.setId_node(nodes1.getId_node());
             depot.setAddress(nodes1.getAddress());
             depot.setLng(nodes1.getLng());
             depot.setLat(nodes1.getLat());
@@ -95,9 +105,25 @@ public class LocalSeachAPI {
                 updateVehicle.setCost(vehicle1.getCost());
                 updateVehicle.setLoading(vehicle1.getLoading());
                 updateVehicle.setStatus(true);
+
+                //save to database historyRoutes
+                HistoryRoutes historyRoutes = new HistoryRoutes();
+                historyRoutes.setCost_route(vehicle1.getCost());
+                historyRoutes.setCapacity_route(vehicle1.getCapacity());
+                historyRoutes.setLoading_route(vehicle1.getLoading());
+                historyRoutes.setVehicle(updateVehicle);
+                historyRoutes.setStatus_route(true);
+                Date time = new Date();
+                historyRoutes.setTime(time);
+                historyRouteRepository.save(historyRoutes);
+                for(Node updateNode : vehicle1.getNodes()){
+                    if(updateNode.getId_node() != 0){
+                        updateNode.setHistoryRoutes(historyRoutes);
+                        nodeRepository.save(updateNode);
+                    }
+                }
                 vehicleRepository.save(updateVehicle);
             }
-
         }
         return vehicle;
     }

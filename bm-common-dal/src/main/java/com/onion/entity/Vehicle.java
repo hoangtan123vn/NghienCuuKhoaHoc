@@ -35,6 +35,7 @@ public class Vehicle {
     @Transient
     public ArrayList<Node> nodes = new ArrayList<>();
 
+
     @Override
     public String toString() {
         return "Vehicle{" +

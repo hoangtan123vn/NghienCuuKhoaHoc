@@ -181,7 +181,7 @@ public class UserApi {
     return updateHistoryRoutes;
     }
 
-    @GetMapping("/getIdVehicle")
+    @PostMapping("/getIdVehicle")
     public int GetIdVehicle(@RequestBody RequestIdVehicle requestIdVehicle){
         User newuser = userRepository.findByUsername(requestIdVehicle.getUsername()).orElse(null);
         System.out.println(newuser);

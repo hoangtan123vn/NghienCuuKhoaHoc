@@ -8,6 +8,7 @@ import com.onion.repository.HistoryRouteRepository;
 import com.onion.repository.UserRepository;
 import com.onion.repository.VehicleRepository;
 import com.onion.request.LoginRequest;
+import com.onion.request.RequestIdVehicle;
 import com.onion.respone.JwtAuthenticationRespone;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -178,6 +179,14 @@ public class UserApi {
     public HistoryRoutes getHistoryRoutes(@PathVariable(value = "id") int id_route){
     HistoryRoutes updateHistoryRoutes = historyRouteRepository.findById(id_route).orElse(null);
     return updateHistoryRoutes;
+    }
+
+    @GetMapping("/getIdVehicle")
+    public int GetIdVehicle(@RequestBody RequestIdVehicle requestIdVehicle){
+        User newuser = userRepository.findByUsername(requestIdVehicle.getUsername()).orElse(null);
+        System.out.println(newuser);
+        int id_vehicle = newuser.getVehicle().getId_vehicle();
+        return id_vehicle;
     }
 
     @PostMapping("/newhistoryRoutes")

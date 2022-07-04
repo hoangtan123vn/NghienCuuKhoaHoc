@@ -123,10 +123,10 @@ public class UserApi {
         Role role = new Role(2, "USER");
         Vehicle vehicle = null;
         if(newUser.getVehicle().getId_vehicle() == 1){
-            vehicle = new Vehicle(100, 0, false);
+            vehicle = new Vehicle(1000, 0, false);
         }
         else if(newUser.getVehicle().getId_vehicle() == 2){
-            vehicle = new Vehicle(500, 0, false);
+            vehicle = new Vehicle(1500, 0, false);
         }
         user.setVehicle(vehicle);
         user.setRole(role);

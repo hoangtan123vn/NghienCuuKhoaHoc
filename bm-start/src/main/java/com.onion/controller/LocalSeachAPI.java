@@ -65,7 +65,7 @@ public class LocalSeachAPI {
         int i = 1;
         for(Node nodes : lsRequest.getNode()){
             Node node1 = new Node();
-            node1.setId_node(i);
+            node1.setIdnode(i);
             node1.setAddress(nodes.getAddress());
             node1.setLat(nodes.getLat());
             node1.setLng(nodes.getLng());
@@ -77,7 +77,7 @@ public class LocalSeachAPI {
         }
 
         for(Node nodes1 : lsRequest.getDepot()){
-            depot.setId_node(nodes1.getId_node());
+            depot.setIdnode(nodes1.getIdnode());
             depot.setAddress(nodes1.getAddress());
             depot.setLng(nodes1.getLng());
             depot.setLat(nodes1.getLat());
@@ -112,12 +112,12 @@ public class LocalSeachAPI {
                 historyRoutes.setCapacity_route(vehicle1.getCapacity());
                 historyRoutes.setLoading_route(vehicle1.getLoading());
                 historyRoutes.setVehicle(updateVehicle);
-                historyRoutes.setStatus_route(true);
+                historyRoutes.setStatus_route(false);
                 Date time = new Date();
                 historyRoutes.setTime(time);
                 historyRouteRepository.save(historyRoutes);
                 for(Node updateNode : vehicle1.getNodes()){
-                    if(updateNode.getId_node() != 0){
+                    if(updateNode.getIdnode() != 0){
                         updateNode.setHistoryRoutes(historyRoutes);
                         nodeRepository.save(updateNode);
                     }

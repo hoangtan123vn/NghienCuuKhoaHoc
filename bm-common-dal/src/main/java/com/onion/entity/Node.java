@@ -13,7 +13,7 @@ public class Node{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public int id_node;
+    public int idnode;
 
     @JsonProperty("address")
     public String address;
@@ -23,6 +23,7 @@ public class Node{
     public double lng;
     @JsonProperty("demand")
     public int demand;
+
 
     @Column(name="routed")
     public boolean isRouted;
@@ -35,8 +36,8 @@ public class Node{
     public Node() {
 
     }
-    public Node(int node,String address,double lat,double lng,int demand){
-        this.id_node = id_node;
+    public Node(int idnode,String address,double lat,double lng,int demand){
+        this.idnode = idnode;
         this.address = address;
         this.lat = lat;
         this.lng = lng;

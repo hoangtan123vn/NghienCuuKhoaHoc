@@ -5,11 +5,14 @@ import com.onion.UserService;
 import com.onion.config.jwt.JwtTokenProvider;
 import com.onion.entity.*;
 import com.onion.repository.HistoryRouteRepository;
+import com.onion.repository.NodeRepository;
 import com.onion.repository.UserRepository;
 import com.onion.repository.VehicleRepository;
 import com.onion.request.LoginRequest;
 import com.onion.request.RequestIdVehicle;
+import com.onion.respone.CountDrivers;
 import com.onion.respone.JwtAuthenticationRespone;
+import com.onion.respone.TotalCostDriver;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -25,10 +28,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.SQLDataException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+
+import static java.util.Comparator.comparing;
 
 @RestController
 @RequestMapping(path="api/auth")
@@ -56,6 +58,9 @@ public class UserApi {
 
     @Autowired
     HistoryRouteRepository historyRouteRepository;
+
+    @Autowired
+    NodeRepository nodeRepository;
 
 //    @PostMapping("/register")
 //    public User Register(@RequestBody User user){
@@ -121,6 +126,26 @@ public class UserApi {
     public User addUser(@RequestBody User newUser) throws Exception {
         User user = new User(newUser.getUsername(), passwordEncoder.encode(newUser.getPassword()), newUser.getFullname(), newUser.getAge(), newUser.getAddress(), newUser.getPhonenumber());
         Role role = new Role(2, "USER");
+        System.out.println(newUser.getPhonenumber());
+        System.out.println(passwordEncoder.encode("admin"));
+        Vehicle vehicle = null;
+        if(newUser.getVehicle().getId_vehicle() == 1){
+            vehicle = new Vehicle(1000, 0, false);
+        }
+        else if(newUser.getVehicle().getId_vehicle() == 2){
+            vehicle = new Vehicle(1500, 0, false);
+        }
+        user.setVehicle(vehicle);
+        user.setRole(role);
+        //vehicle.setUser(user);
+        vehicleRepository.save(vehicle);
+        return userRepository.save(user);
+    }
+
+    @PostMapping("/registeradmin")
+    public User addUserAdmin(@RequestBody User newUser) throws Exception {
+        User user = new User(newUser.getUsername(), passwordEncoder.encode(newUser.getPassword()), newUser.getFullname(), newUser.getAge(), newUser.getAddress(), newUser.getPhonenumber());
+        Role role = new Role(1, "ADMIN");
         Vehicle vehicle = null;
         if(newUser.getVehicle().getId_vehicle() == 1){
             vehicle = new Vehicle(1000, 0, false);
@@ -146,11 +171,14 @@ public class UserApi {
         List<User> users = userService.getAllUser();
         List<User> updatedUser = new ArrayList<>();
         for (User user : users) {
-            user.getVehicle().setStatus(false);
-            user.getVehicle().setLoading(0);
-            user.getVehicle().setCost(0);
-            userRepository.save(user);
-            updatedUser.add(user);
+            if(user.getRole().getId_role() != 1){
+                user.getVehicle().setStatus(false);
+                user.getVehicle().setLoading(0);
+                user.getVehicle().setCost(0);
+                userRepository.save(user);
+                updatedUser.add(user);
+            }
+
         }
         return updatedUser;
     }
@@ -178,6 +206,7 @@ public class UserApi {
     @GetMapping("/gethistoryRoutes/{id}")
     public HistoryRoutes getHistoryRoutes(@PathVariable(value = "id") int id_route){
     HistoryRoutes updateHistoryRoutes = historyRouteRepository.findById(id_route).orElse(null);
+
     return updateHistoryRoutes;
     }
 
@@ -207,15 +236,125 @@ public class UserApi {
         return historyRouteRepository.save(updatehistoryroutes);
     }
 
+    @PutMapping("/updateHistoryRoutes/{id}")
+    public HistoryRoutes updateHistoryRoutes(
+            @PathVariable(value = "id") int id_route) {
+        HistoryRoutes updateHistoryRoutes = historyRouteRepository.findById(id_route).orElse(null);
+        updateHistoryRoutes.setStatus_route(true);
+        return historyRouteRepository.save(updateHistoryRoutes);
+    }
+
 //    @GetMapping("/getInfohostoryRoutes/{id}")
 //    public HistoryRoutes getInfoHistoryRoutes(@PathVariable(value = "id"),int id_route){
 //
 //    }
 
+    @GetMapping("/getUserDetails/{username}")
+    public User getuserDetails (@PathVariable(value = "username") String username){
+        User updateUser = userRepository.findByUsername(username).orElse(null);
+        return updateUser;
+    }
+
+    @GetMapping("/GetListHistoryroutes")
+    public List<HistoryRoutes> GetListHistoryRoutes(){
+//        Sort sort = new Sort(Sort.Direction.DESC,"id_route");
+
+        List<HistoryRoutes> historyRoutes = historyRouteRepository.findAllByOrderByTimeDesc();
+        //System.out.println(historyRouteRepository.findAll());
+        return historyRoutes;
+    }
+
+    @GetMapping("/GetListNodes")
+    public List<Node> GetListNodes(){
+//        Sort sort = new Sort(Sort.Direction.DESC,"id_route");
+        List<Node> ListNodes = nodeRepository.findAllByOrderByIdnodeDesc();
+        //System.out.println(historyRouteRepository.findAll());
+        return ListNodes;
+    }
+
+    @GetMapping("/GetListHistoryroutes1")
+    public List<CountDrivers> CountHistoryRoutes(){
+        List<Vehicle> vehicles = vehicleRepository.findAll();
+        List<CountDrivers> countVehicles = new ArrayList<>();
+        int i=0;
+        for(Vehicle vehicle : vehicles){
+            Long count = historyRouteRepository.countByVehicle(vehicle);
+            User user = userRepository.findByVehicle(vehicle);
+            CountDrivers countDrivers = new CountDrivers(user.getFullname(),count);
+            countVehicles.add(countDrivers);
+            i++;
+        }
+//        Sort sort = new Sort(Sort.Direction.DESC,"id_route");
+
+        //System.out.println(historyRouteRepository.findAll());
+        return countVehicles;
+    }
+
+    @GetMapping("/GetTotalDriver")
+    public List<TotalCostDriver> GetToTalCostDriver(){
+        List<Vehicle> vehicles = vehicleRepository.findAll();
+
+        List<TotalCostDriver> totalCostDrivers = new ArrayList<>();
+        int i=0;
+
+        for(Vehicle vehicle : vehicles){
+            long total = 0;
+            List<HistoryRoutes> historyRoutes = historyRouteRepository.findAllByVehicle(vehicle);
+            User user = userRepository.findByVehicle(vehicle);
+            for(int j=0;j<historyRoutes.size();j++){
+                total += historyRoutes.get(j).getCost_route();
+            }
+            TotalCostDriver totalCostDriver = new TotalCostDriver(user.getFullname(),total);
+            totalCostDrivers.add(totalCostDriver);
+        }
+        sortByTotal(totalCostDrivers);
+
+        return totalCostDrivers;
+    }
+
+    public List<TotalCostDriver> sortByTotal(List<TotalCostDriver> totalCostDrivers) {
+
+        Collections.sort(totalCostDrivers, new Comparator<TotalCostDriver>() {
+
+            @Override
+            public int compare(TotalCostDriver driver1, TotalCostDriver driver2) {
+                return driver1.getTotal().compareTo(driver2.getTotal());
+            }
+
+        });
+        return totalCostDrivers;
+    }
+
+    @GetMapping("/GetUserInfo/{id}")
+    public User getUserInfo(@PathVariable(value = "id") int id_vehicle){
+        Vehicle vehicle = vehicleRepository.findById(id_vehicle).orElse(null);
+        User user = userRepository.findByVehicle(vehicle);
+        return user;
+    }
+//    @GetMapping("/GetListRoutesUsers/{id}")
+//    public GetInfoUser GetInfoListRoute(@PathVariable(value = "id") int id_vehicle){
+////        Sort sort = new Sort(Sort.Direction.DESC,"id_route");
+//        GetInfoUser getInfoUser = new GetInfoUser();
+//        List<HistoryRoutes> historyRoutes = historyRouteRepository.findAllByOrderByTimeDesc();
+//        //System.out.println(historyRouteRepository.findAll());
+//        Vehicle vehicle = vehicleRepository.findById(id_vehicle).orElse(null);
+//        User user = userRepository.findByVehicle(vehicle);
+//        getInfoUser.setHistoryRoutesList(historyRoutes);
+//        getInfoUser.setFullname(user.getFullname());
+//        return getInfoUser;
+//    }
+
+
+//    @GetMapping("/CountDrivers")
+//    public List<CountDrivers> getCountDrivers(){
+//
+//    }
+
+
+
+
 
 }
-
-
 
 
 

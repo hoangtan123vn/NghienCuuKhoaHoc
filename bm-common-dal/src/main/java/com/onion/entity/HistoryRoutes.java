@@ -1,6 +1,7 @@
 package com.onion.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,8 +20,10 @@ public class HistoryRoutes {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name="id_route")
     public int id_route;
 
+    @Column(name="time")
     public Date time;
 
     public long cost_route;

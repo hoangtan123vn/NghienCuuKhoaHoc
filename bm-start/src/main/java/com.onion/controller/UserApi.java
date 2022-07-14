@@ -4,10 +4,7 @@ import com.onion.config.jwt.UserDetailsServiceImpl;
 import com.onion.UserService;
 import com.onion.config.jwt.JwtTokenProvider;
 import com.onion.entity.*;
-import com.onion.repository.HistoryRouteRepository;
-import com.onion.repository.NodeRepository;
-import com.onion.repository.UserRepository;
-import com.onion.repository.VehicleRepository;
+import com.onion.repository.*;
 import com.onion.request.LoginRequest;
 import com.onion.request.RequestIdVehicle;
 import com.onion.respone.CountDrivers;
@@ -61,6 +58,9 @@ public class UserApi {
 
     @Autowired
     NodeRepository nodeRepository;
+
+    @Autowired
+    VehicleTypeRepository vehicleTypeRepository;
 
 //    @PostMapping("/register")
 //    public User Register(@RequestBody User user){
@@ -126,15 +126,13 @@ public class UserApi {
     public User addUser(@RequestBody User newUser) throws Exception {
         User user = new User(newUser.getUsername(), passwordEncoder.encode(newUser.getPassword()), newUser.getFullname(), newUser.getAge(), newUser.getAddress(), newUser.getPhonenumber());
         Role role = new Role(2, "USER");
-        System.out.println(newUser.getPhonenumber());
-        System.out.println(passwordEncoder.encode("admin"));
-        Vehicle vehicle = null;
-        if(newUser.getVehicle().getId_vehicle() == 1){
-            vehicle = new Vehicle(1000, 0, false);
-        }
-        else if(newUser.getVehicle().getId_vehicle() == 2){
-            vehicle = new Vehicle(1500, 0, false);
-        }
+        Vehicle vehicle = newUser.getVehicle();
+        System.out.println(newUser.getVehicle().getVehicleType());
+        VehicleType vehicleType = newUser.getVehicle().getVehicleType();
+        vehicle.setVehicleType(vehicleType);
+        vehicle.setStatus(false);
+        vehicle.setCost(0);
+        vehicle.setLoading(0);
         user.setVehicle(vehicle);
         user.setRole(role);
         //vehicle.setUser(user);
@@ -142,23 +140,23 @@ public class UserApi {
         return userRepository.save(user);
     }
 
-    @PostMapping("/registeradmin")
-    public User addUserAdmin(@RequestBody User newUser) throws Exception {
-        User user = new User(newUser.getUsername(), passwordEncoder.encode(newUser.getPassword()), newUser.getFullname(), newUser.getAge(), newUser.getAddress(), newUser.getPhonenumber());
-        Role role = new Role(1, "ADMIN");
-        Vehicle vehicle = null;
-        if(newUser.getVehicle().getId_vehicle() == 1){
-            vehicle = new Vehicle(1000, 0, false);
-        }
-        else if(newUser.getVehicle().getId_vehicle() == 2){
-            vehicle = new Vehicle(1500, 0, false);
-        }
-        user.setVehicle(vehicle);
-        user.setRole(role);
-        //vehicle.setUser(user);
-        vehicleRepository.save(vehicle);
-        return userRepository.save(user);
-    }
+//    @PostMapping("/registeradmin")
+//    public User addUserAdmin(@RequestBody User newUser) throws Exception {
+//        User user = new User(newUser.getUsername(), passwordEncoder.encode(newUser.getPassword()), newUser.getFullname(), newUser.getAge(), newUser.getAddress(), newUser.getPhonenumber());
+//        Role role = new Role(1, "ADMIN");
+//        Vehicle vehicle = null;
+//        if(newUser.getVehicle().getId_vehicle() == 1){
+//            vehicle = new Vehicle(1000, 0, false);
+//        }
+//        else if(newUser.getVehicle().getId_vehicle() == 2){
+//            vehicle = new Vehicle(1500, 0, false);
+//        }
+//        user.setVehicle(vehicle);
+//        user.setRole(role);
+//        //vehicle.setUser(user);
+//        vehicleRepository.save(vehicle);
+//        return userRepository.save(user);
+//    }
 
     @PostMapping("/addvehicle")
     public Vehicle addVehicle(@RequestBody Vehicle vehicle) {
@@ -206,7 +204,6 @@ public class UserApi {
     @GetMapping("/gethistoryRoutes/{id}")
     public HistoryRoutes getHistoryRoutes(@PathVariable(value = "id") int id_route){
     HistoryRoutes updateHistoryRoutes = historyRouteRepository.findById(id_route).orElse(null);
-
     return updateHistoryRoutes;
     }
 
@@ -331,6 +328,14 @@ public class UserApi {
         User user = userRepository.findByVehicle(vehicle);
         return user;
     }
+
+    @PostMapping("/addVehicleType")
+    public VehicleType AddVehicleType(@RequestBody VehicleType vehicleType){
+        VehicleType newVehicleType = new VehicleType();
+        newVehicleType.setName_type(vehicleType.getName_type());
+        newVehicleType.setCapacity(vehicleType.getCapacity());
+        return vehicleTypeRepository.save(newVehicleType);
+    }
 //    @GetMapping("/GetListRoutesUsers/{id}")
 //    public GetInfoUser GetInfoListRoute(@PathVariable(value = "id") int id_vehicle){
 ////        Sort sort = new Sort(Sort.Direction.DESC,"id_route");
@@ -349,6 +354,12 @@ public class UserApi {
 //    public List<CountDrivers> getCountDrivers(){
 //
 //    }
+
+    @GetMapping("/GetVehiclesType")
+    public List<VehicleType> GetVehiclesType(){
+        List<VehicleType> vehicleTypeList = vehicleTypeRepository.findAll();
+        return vehicleTypeList;
+    }
 
 
 

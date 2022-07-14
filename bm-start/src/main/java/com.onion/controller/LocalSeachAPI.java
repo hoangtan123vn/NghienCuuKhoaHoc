@@ -101,15 +101,16 @@ public class LocalSeachAPI {
             if(vehicle1.getCost() > 0){
                 Vehicle updateVehicle = new Vehicle();
                 updateVehicle.setId_vehicle(vehicle1.getId_vehicle());
-                updateVehicle.setCapacity(vehicle1.getCapacity());
+                //updateVehicle.setCapacity(vehicle1.getCapacity());
+                System.out.println(vehicle1.getVehicleType());
+                updateVehicle.setVehicleType(vehicle1.getVehicleType());
                 updateVehicle.setCost(vehicle1.getCost());
                 updateVehicle.setLoading(vehicle1.getLoading());
                 updateVehicle.setStatus(true);
-
                 //save to database historyRoutes
                 HistoryRoutes historyRoutes = new HistoryRoutes();
                 historyRoutes.setCost_route(vehicle1.getCost());
-                historyRoutes.setCapacity_route(vehicle1.getCapacity());
+                historyRoutes.setCapacity_route(vehicle1.getVehicleType().getCapacity());
                 historyRoutes.setLoading_route(vehicle1.getLoading());
                 historyRoutes.setVehicle(updateVehicle);
                 historyRoutes.setStatus_route(false);

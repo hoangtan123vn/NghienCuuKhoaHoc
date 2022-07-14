@@ -23,8 +23,6 @@ public class Vehicle {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public int id_vehicle;
 
-    public int capacity;
-
     public long cost;
 
     public int loading;
@@ -35,48 +33,44 @@ public class Vehicle {
     @Transient
     public ArrayList<Node> nodes = new ArrayList<>();
 
+    @ManyToOne
+    @JoinColumn(name = "id_type")
+    private VehicleType vehicleType;
+
 
     @Override
     public String toString() {
         return "Vehicle{" +
                 "id_vehicle=" + id_vehicle +
-                ", capacity=" + capacity +
                 ", cost=" + cost +
                 ", loading=" + loading +
+                ", status=" + status +
+                ", nodes=" + nodes +
+                ", vehicleType=" + vehicleType +
                 '}';
     }
 
-    public Vehicle(int capacity, int cost ,int loading){
-        this.capacity = capacity;
+    public Vehicle(int cost , int loading){
         this.cost = cost;
         this.loading = loading;
     }
 
-    public Vehicle(int id_vehicle,int capacity, int cost ,int loading){
+    public Vehicle(int id_vehicle, int cost ,int loading){
         this.id_vehicle = id_vehicle;
-        this.capacity = capacity;
         this.cost = cost;
         this.loading = loading;
     }
 
-    public Vehicle(int id_vehicle,int capacity, int cost ,int loading,boolean status){
+    public Vehicle(int id_vehicle, int cost ,int loading,boolean status){
         this.id_vehicle = id_vehicle;
-        this.capacity = capacity;
         this.cost = cost;
         this.loading = loading;
         this.status = status;
     }
 
-    public Vehicle(int capacity, int cost ,boolean status){
-        this.capacity = capacity;
+    public Vehicle(int cost ,boolean status){
         this.cost = cost;
         this.status = status;
     }
 
-
-
-    public boolean CheckIfFits(int dem) //Check if we have Capacity Violation
-    {
-        return ((loading + dem <= capacity));
-    }
 }

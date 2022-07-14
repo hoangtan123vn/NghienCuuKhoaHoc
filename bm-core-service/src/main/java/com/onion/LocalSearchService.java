@@ -32,7 +32,7 @@ public class LocalSearchService {
         List<Vehicle> vehicles = vehicleRepository.getVehiclesByStatusFalse();
         List<Vehicle> vehiclesCapacity = new ArrayList<>();
         for(Vehicle vehicle : vehicles){
-            if(vehicle.getCapacity() == Capacity){
+            if(vehicle.getVehicleType().getCapacity() == Capacity){
                 vehiclesCapacity.add(vehicle);
             }
             else if(Capacity == 1){
@@ -140,7 +140,7 @@ public class LocalSearchService {
 //        System.out.println("rtList  : " + s);
         System.out.println(customers);
         LocalSearch(vehiclesCapacity.size(), rtList,customers,depot,s);
-       // LocalSearchInterandInstra(Soluongxe,rtList,s);
+      //  LocalSearchInterandInstra(vehiclesCapacity.size(),rtList,s);
         for (int j=0; j< vehiclesCapacity.size(); j++)
         {
             int vehicle_number = j+1;
@@ -152,7 +152,7 @@ public class LocalSearchService {
             System.out.println("");
             System.out.println("Route Cost = " + s.vehicles.get(j).cost);
             System.out.println("Final Load: " + s.vehicles.get(j).loading);
-            System.out.println("Final Remaining Capacity = " + (rtList.get(j).capacity - s.vehicles.get(j).loading));
+            System.out.println("Final Remaining Capacity = " + (rtList.get(j).getVehicleType().getCapacity() - s.vehicles.get(j).loading));
             System.out.println("----------------------------------------");
 
         }
@@ -164,7 +164,7 @@ public class LocalSearchService {
     }
 
     public Long KhoangCachDuongDi(String source,String destination) throws IOException, ParseException {
-        String key = "AIzaSyABGtMiuFLdYyX9gakvCdVbftEuN1Rosc8";
+        String key = "AIzaSyC3Z_A5IhAZ7tmJ6aJuk3XLPniHqZDijjk";
         OkHttpClient client = new OkHttpClient().newBuilder()
                 .build();
         Request request = new Request.Builder()
@@ -191,7 +191,7 @@ public class LocalSearchService {
         {
             ArrayList<Node> nodeSequence = rtList.get(j).nodes;
             nodeSequence.add(depot);
-            int capacity = rtList.get(j).capacity; // Sức chứa của mỗi xe (=50)
+            int capacity = rtList.get(j).getVehicleType().getCapacity(); // Sức chứa của mỗi xe (=50)
             int load = rtList.get(j).loading; // Tải trọng ban đầu của chiếc xe (=0)
             boolean isFinal = false; // Thiết lập giá trị boolen để kiểm tra tuyến đường đã xong hay chưa
             // Nếu như không còn điểm giao hàng nào nữa,điểm kết thúc là kho hàng sẽ được thêm vào
@@ -318,7 +318,7 @@ public class LocalSearchService {
             System.out.println("");
             System.out.println("Route Cost = " + s.vehicles.get(j).cost);
             System.out.println("Final Load: " + s.vehicles.get(j).loading);
-            System.out.println("Final Remaining Capacity = " + (rtList.get(j).capacity - s.vehicles.get(j).loading));
+            System.out.println("Final Remaining Capacity = " + (rtList.get(j).getVehicleType().getCapacity() - s.vehicles.get(j).loading));
             System.out.println("----------------------------------------");
 
         }
@@ -385,10 +385,10 @@ public class LocalSearchService {
                             Long toMoveCost = costAddedTo - costRemovedTo;
                             System.out.println(s.vehicles.get(to).loading);
                             System.out.println(s.vehicles.get(from).nodes.get(fromIndex).demand);
-                            System.out.println(s.vehicles.get(to).capacity);
+                            System.out.println(s.vehicles.get(to).getVehicleType().getCapacity());
                             //If this move is the best found so far
                             Long moveCost = fromMoveCost+toMoveCost;
-                            if ((moveCost < bestMoveCost)&&(from == to || (s.vehicles.get(to).loading + s.vehicles.get(from).nodes.get(fromIndex).demand<=s.vehicles.get(to).capacity)))
+                            if ((moveCost < bestMoveCost)&&(from == to || (s.vehicles.get(to).loading + s.vehicles.get(from).nodes.get(fromIndex).demand<=s.vehicles.get(to).getVehicleType().getCapacity())))
                             {
                                 //set the best cost equal to the cost of this solution
                                 bestMoveCost = moveCost;
